@@ -1,4 +1,5 @@
 version: "3.8"
+name: disx-dev
 
 services:
   post-db-dev:
