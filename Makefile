@@ -4,10 +4,10 @@ start-db:
 stop-db:
 	docker compose -f docker-compose-dev.yml down
 
-start-post:
-	cd .. && cd post-service && quarkus dev
+start-disx:
+	cd .. && cd disx-service && quarkus dev
 
-stop-post:
+stop-disx:
 	pkill java &
 
 start-frontend:
@@ -24,7 +24,7 @@ stop-gateway:
 
 start-all:
 	docker compose -f docker-compose-dev.yml up -d
-	cd .. & cd post-service && quarkus dev &
+	cd .. & cd disx-service && quarkus dev &
 	cd .. & cd frontend && yarn dev &
 
-stop-all: stop-db stop-post stop-frontend
+stop-all: stop-db stop-disx stop-frontend

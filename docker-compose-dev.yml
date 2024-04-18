@@ -2,8 +2,8 @@ version: "3.8"
 name: disx-dev
 
 services:
-  post-db-dev:
-    container_name: post-db-dev
+  disx-db-dev:
+    container_name: disx-db-dev
     image: postgres:latest
     ports:
       - 3011:3011
