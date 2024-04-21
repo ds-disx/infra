@@ -8,7 +8,7 @@ start-disx:
 	cd .. && cd disx-service && quarkus dev
 
 stop-disx:
-	pkill java &
+	kill -9 `sudo lsof -t -i:3010`   
 
 start-frontend:
 	cd .. && cd frontend && yarn dev
