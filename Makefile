@@ -2,7 +2,7 @@ start-db:
 	docker compose -f docker-compose-dev.yml up -d
 
 stop-db:
-	docker compose -f docker-compose-dev.yml down
+	docker compose -f docker-compose-dev.yml stop
 
 start-disx:
 	cd .. && cd disx-service && quarkus dev
@@ -23,8 +23,8 @@ stop-gateway:
 	pkill nginx &
 
 start-all:
-	docker compose -f docker-compose-dev.yml up -d
-	cd .. & cd disx-service && quarkus dev &
-	cd .. & cd frontend && yarn dev &
+	docker compose -f docker-compose-dev.yml up -d &
+	cd .. && cd disx-service && quarkus dev &
+	cd .. && cd frontend && yarn dev &
 
 stop-all: stop-db stop-disx stop-frontend
