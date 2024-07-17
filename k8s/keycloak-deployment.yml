@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - args: ['start', '--http-port=3030']
+          env:
+            - name: KC_DB
+              value: 'postgres'
+            - name: KC_DB_URL
+              value: 'jdbc:postgresql://keycloak-db:3031/postgres'
+            - name: KC_DB_USERNAME
+              value: 'postgres'
+            - name: KC_DB_PASSWORD
+              value: 'postgres'
+            - name: KC_STRICT_HOSTNAME
+              value: 'false'
+            - name: KC_HTTP_ENABLED
+              value: 'true'
+            - name: KC_HOSTNAME_URL
+              value: 'https://auth.codeds.nl'
+            - name: KEYCLOAK_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  name: kc-secrets
+                  key: KC_ADMIN
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kc-secrets
+                  key: KC_PASSWORD
+            - name: KC_PROXY
+              value: 'edge'
+              # realm-export.json is a file that contains the realm configuration for keycloak to import
+          image: quay.io/keycloak/keycloak:24.0.1
+          name: keycloak
+          ports:
+            - name: http
+              containerPort: 3030
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  ports:
+    - port: 3030
+      targetPort: 3030
+      protocol: TCP
+  selector:
+    app: keycloak
+  type: ClusterIP

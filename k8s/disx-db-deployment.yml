@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: disx-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: disx-db
+  template:
+    metadata:
+      labels:
+        app: disx-db
+    spec:
+      containers:
+      - name: disx-db
+        image: postgres:latest
+        ports:
+        - containerPort: 3011
+        env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        - name: PGPORT
+          value: "3011"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: disx-db
+spec:
+  selector:
+    app: disx-db
+  ports:
+    - protocol: TCP
+      port: 3011
+      targetPort: 3011
+  type: ClusterIP
